@@ -18,16 +18,11 @@ export LevelledGrounds.*
 final case class ClimbLevelUp(levelDiff: Int) extends Ability
 final case class FallLevelDown(levelDiff: Int) extends Ability
 
-final class LevelledGroundCreator(using ComponentInit) extends ComponentCreator:
-  type CreatedComponentType = LevelledGround
-
+final class LevelledGroundCreator(using ComponentInit) extends ComponentCreator[LevelledGround]:
   category = ComponentCategory("levelledgrounds", "Levelled Grounds")
 
   icon += "Creators/LevelledGroundCreator"
   icon += "Creators/Creator"
-
-  protected def createComponent()(using init: ComponentInit): CreatedComponentType =
-    new LevelledGround()
 end LevelledGroundCreator
   
 class LevelledGround(using ComponentInit) extends Field derives Reflector:
