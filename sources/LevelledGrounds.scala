@@ -25,13 +25,11 @@ final class LevelledGroundCreator(using ComponentInit) extends ComponentCreator[
   icon += "Creators/Creator"
 end LevelledGroundCreator
   
-class LevelledGround(using ComponentInit) extends Field derives Reflector:
+class LevelledGround(using ComponentInit) extends Field:
   painter += "Fields/Grass"
   category = ComponentCategory("levelledgrounds", "Levelled Grounds")
 
   var level: Int = 0
-
-  override def reflect() = autoReflect[LevelledGround]
 
   override def entering(context: MoveContext): Unit = {
     import context.*
