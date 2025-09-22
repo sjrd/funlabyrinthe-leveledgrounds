@@ -4,16 +4,9 @@ import com.funlabyrinthe.core.*
 import com.funlabyrinthe.mazes.*
 import com.funlabyrinthe.mazes.std.*
 
-object LevelledGrounds extends Module:
-  override protected def createComponents()(using Universe): Unit =
-    val levelledGroundCreator = new LevelledGroundCreator
-  end createComponents
-  
-  def levelledGroundCreator(using Universe): LevelledGroundCreator =
-    myComponentByID("levelledGroundCreator")
-end LevelledGrounds
+object LevelledGrounds extends Module
 
-export LevelledGrounds.*
+@definition def levelledGroundCreator(using Universe) = new LevelledGroundCreator
 
 final case class ClimbLevelUp(levelDiff: Int) extends Ability
 final case class FallLevelDown(levelDiff: Int) extends Ability
