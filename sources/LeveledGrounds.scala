@@ -1,26 +1,26 @@
-package user.sjrd.levelledground
+package user.sjrd.leveledground
 
 import com.funlabyrinthe.core.*
 import com.funlabyrinthe.mazes.*
 import com.funlabyrinthe.mazes.std.*
 
-object LevelledGrounds extends Module
+object LeveledGrounds extends Module
 
-@definition def levelledGroundCreator(using Universe) = new LevelledGroundCreator
+@definition def leveledGroundCreator(using Universe) = new LeveledGroundCreator
 
 final case class ClimbLevelUp(levelDiff: Int) extends Ability
 final case class FallLevelDown(levelDiff: Int) extends Ability
 
-final class LevelledGroundCreator(using ComponentInit) extends ComponentCreator[LevelledGround]:
-  category = ComponentCategory("levelledgrounds", "Levelled Grounds")
+final class LeveledGroundCreator(using ComponentInit) extends ComponentCreator[LeveledGround]:
+  category = ComponentCategory("leveledgrounds", "Leveled Grounds")
 
-  icon += "Creators/LevelledGroundCreator"
+  icon += "Creators/LeveledGroundCreator"
   icon += "Creators/Creator"
-end LevelledGroundCreator
+end LeveledGroundCreator
 
-class LevelledGround(using ComponentInit) extends Field:
+class LeveledGround(using ComponentInit) extends Field:
   painter += "Fields/Grass"
-  category = ComponentCategory("levelledgrounds", "Levelled Grounds")
+  category = ComponentCategory("leveledgrounds", "Leveled Grounds")
 
   var level: Int = 0
 
@@ -39,7 +39,7 @@ class LevelledGround(using ComponentInit) extends Field:
         cancel()
       else
         val sourceLevel = src.get().field match
-          case levelled: LevelledGround => levelled.level
+          case leveled: LeveledGround => leveled.level
           case _                        => 0
         val levelDiff = level - sourceLevel
         if levelDiff > 0 then
@@ -58,7 +58,7 @@ class LevelledGround(using ComponentInit) extends Field:
   override def dispatch[A]: PartialFunction[SquareMessage[A], A] = {
     case PlankInteraction(PlankInteraction.Kind.PassOver, _, passOverPos, leaveFrom, _) =>
       leaveFrom().field match
-        case src: LevelledGround =>
+        case src: LeveledGround =>
           if passOverPos().obstacle == noObstacle then
             src.level > level
           else
@@ -68,11 +68,11 @@ class LevelledGround(using ComponentInit) extends Field:
 
     case PlankInteraction(PlankInteraction.Kind.LeaveFrom, _, _, leaveFrom, arriveAt) =>
       arriveAt().field match
-        case dest: LevelledGround =>
+        case dest: LeveledGround =>
           dest.level == this.level
             && leaveFrom().obstacle == noObstacle
             && arriveAt().obstacle == noObstacle
         case _ =>
           false
   }
-end LevelledGround
+end LeveledGround

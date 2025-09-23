@@ -1,7 +1,8 @@
 {
   "isLibrary": true,
   "modules": [
+    "com.funlabyrinthe.core.AdditionalComponents",
     "com.funlabyrinthe.mazes.Mazes",
-    "user.sjrd.levelledground.LevelledGrounds"
+    "user.sjrd.leveledground.LeveledGrounds"
   ]
 }
