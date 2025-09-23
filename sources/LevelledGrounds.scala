@@ -17,7 +17,7 @@ final class LevelledGroundCreator(using ComponentInit) extends ComponentCreator[
   icon += "Creators/LevelledGroundCreator"
   icon += "Creators/Creator"
 end LevelledGroundCreator
-  
+
 class LevelledGround(using ComponentInit) extends Field:
   painter += "Fields/Grass"
   category = ComponentCategory("levelledgrounds", "Levelled Grounds")
@@ -58,7 +58,7 @@ class LevelledGround(using ComponentInit) extends Field:
   override def dispatch[A]: PartialFunction[SquareMessage[A], A] = {
     case PlankInteraction(PlankInteraction.Kind.PassOver, _, passOverPos, leaveFrom, _) =>
       leaveFrom().field match
-        case src: LevelledGround => 
+        case src: LevelledGround =>
           if passOverPos().obstacle == noObstacle then
             src.level > level
           else
