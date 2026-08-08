@@ -6,17 +6,11 @@ import com.funlabyrinthe.mazes.std.*
 
 object LeveledGrounds extends Module
 
-@definition def leveledGroundCreator(using Universe) = new LeveledGroundCreator
+@definition def leveledGroundTemplate(using Universe) =
+  new LeveledGround().asTemplate("Creators/LeveledGroundCreator")
 
 final case class ClimbLevelUp(levelDiff: Int) extends Ability
 final case class FallLevelDown(levelDiff: Int) extends Ability
-
-final class LeveledGroundCreator(using ComponentInit) extends ComponentCreator[LeveledGround]:
-  category = ComponentCategory("leveledgrounds", "Leveled Grounds")
-
-  icon += "Creators/LeveledGroundCreator"
-  icon += "Creators/Creator"
-end LeveledGroundCreator
 
 class LeveledGround(using ComponentInit) extends Field:
   painter += "Fields/Grass"
