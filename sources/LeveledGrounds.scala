@@ -18,6 +18,9 @@ class LeveledGround(using ComponentInit) extends Field:
 
   var level: Int = 0
 
+  @noinspect
+  var fallDownTooFarExplained: Boolean = false
+
   override def entering(context: MoveContext): Unit = {
     import context.*
 
@@ -34,14 +37,16 @@ class LeveledGround(using ComponentInit) extends Field:
       else
         val sourceLevel = src.get().field match
           case leveled: LeveledGround => leveled.level
-          case _                        => 0
+          case _                      => 0
         val levelDiff = level - sourceLevel
         if levelDiff > 0 then
           if player cannot ClimbLevelUp(levelDiff) then
             cancel()
         else if levelDiff < 0 then
           if player cannot FallLevelDown(-levelDiff) then
-            player.showMessage("C'est trop haut pour sauter ici !")
+            if !fallDownTooFarExplained then
+              fallDownTooFarExplained = true
+              player.showMessage("C'est trop haut pour sauter ici !")
             cancel()
         else
           // ok
