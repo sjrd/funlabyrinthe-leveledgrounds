@@ -21,37 +21,35 @@ class LeveledGround(using ComponentInit) extends Field:
   @noinspect
   var fallDownTooFarExplained: Boolean = false
 
-  override def entering(context: MoveContext): Unit = {
+  override def entering(context: EnteringContext): Unit = {
     import context.*
 
-    if isRegular then
-      val srcPos = src.get.pos
-      val destPos = dest.get.pos
+    val srcPos = src.pos
+    val destPos = dest.pos
 
-      if srcPos.z > destPos.z then
+    if srcPos.z > destPos.z then
+      // ok
+      ()
+    else if srcPos.z < destPos.z then
+      // never ok
+      cancel()
+    else
+      val sourceLevel = src().field match
+        case leveled: LeveledGround => leveled.level
+        case _                      => 0
+      val levelDiff = level - sourceLevel
+      if levelDiff > 0 then
+        if player cannot ClimbLevelUp(levelDiff) then
+          cancel()
+      else if levelDiff < 0 then
+        if player cannot FallLevelDown(-levelDiff) then
+          if !fallDownTooFarExplained then
+            fallDownTooFarExplained = true
+            player.showMessage("C'est trop haut pour sauter ici !")
+          cancel()
+      else
         // ok
         ()
-      else if srcPos.z < destPos.z then
-        // never ok
-        cancel()
-      else
-        val sourceLevel = src.get().field match
-          case leveled: LeveledGround => leveled.level
-          case _                      => 0
-        val levelDiff = level - sourceLevel
-        if levelDiff > 0 then
-          if player cannot ClimbLevelUp(levelDiff) then
-            cancel()
-        else if levelDiff < 0 then
-          if player cannot FallLevelDown(-levelDiff) then
-            if !fallDownTooFarExplained then
-              fallDownTooFarExplained = true
-              player.showMessage("C'est trop haut pour sauter ici !")
-            cancel()
-        else
-          // ok
-          ()
-    end if
   }
 
   override def dispatch[A]: PartialFunction[SquareMessage[A], A] = {
